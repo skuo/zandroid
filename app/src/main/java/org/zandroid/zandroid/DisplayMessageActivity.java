@@ -2,6 +2,7 @@ package org.zandroid.zandroid;
 
 import android.app.Fragment;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -47,13 +48,18 @@ public class DisplayMessageActivity extends AppCompatActivity {
             level = savedInstanceState.getInt(STATE_LEVEL);
         }
 
+        // get preferences
+        SharedPreferences prefs = getSharedPreferences("MyPref", MODE_PRIVATE);
+        String school = prefs.getString("school","unknown");
+
         Intent intent = getIntent();
         String message = intent.getStringExtra(MyActivity.EXTRA_MESSAGE);
         TextView textView = new TextView(this);
         textView.setTextSize(40);
         String hello = getResources().getString(R.string.hello_world);
         textView.setText("[" + level + "," + score + "] "
-                + hello + " ==> " + message);
+                + hello + " ==> " + message
+            + " for " + school);
         RelativeLayout layout = (RelativeLayout) findViewById(R.id.content);
         layout.addView(textView);
     }
