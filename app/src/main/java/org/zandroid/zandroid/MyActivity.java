@@ -1,5 +1,8 @@
 package org.zandroid.zandroid;
 
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -20,6 +23,7 @@ public class MyActivity extends AppCompatActivity {
         // Set the user interface layout for this activity
         // The layout file is defined in the project res/layout/activity_my.xml
         setContentView(R.layout.activity_my);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -62,5 +66,20 @@ public class MyActivity extends AppCompatActivity {
         String message = editText.getText().toString();
         intent.putExtra(EXTRA_MESSAGE, message);
         startActivity(intent);
+    }
+
+    public void selectFrag(View view) {
+        Fragment fr;
+
+        if (view == findViewById(R.id.book_fragment_button)) {
+            fr = new BookFragment();
+        } else {
+            fr = new ArticleFragment();
+        }
+
+        FragmentManager fm = getFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
+        ft.replace(R.id.fragment_place, fr);
+        ft.commit();
     }
 }
