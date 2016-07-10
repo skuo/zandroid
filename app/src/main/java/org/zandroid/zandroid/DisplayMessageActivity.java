@@ -17,6 +17,12 @@ import android.widget.TextView;
 
 public class DisplayMessageActivity extends AppCompatActivity {
 
+    static final String STATE_SCORE = "playerScore";
+    static final String STATE_LEVEL = "ployerLevel";
+
+    private int score = 1;
+    private int level = 1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,13 +40,67 @@ public class DisplayMessageActivity extends AppCompatActivity {
         });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        // check whether we're recreating a previously destroyed instance
+        if (savedInstanceState != null) {
+            score = savedInstanceState.getInt(STATE_SCORE);
+            level = savedInstanceState.getInt(STATE_LEVEL);
+        }
+
         Intent intent = getIntent();
         String message = intent.getStringExtra(MyActivity.EXTRA_MESSAGE);
         TextView textView = new TextView(this);
         textView.setTextSize(40);
-        textView.setText(message);
+        String hello = getResources().getString(R.string.hello_world);
+        textView.setText("[" + level + "," + score + "] "
+                + hello + " ==> " + message);
         RelativeLayout layout = (RelativeLayout) findViewById(R.id.content);
         layout.addView(textView);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume(); // Always call the superclass
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause(); // Always call the superclass
+
+        // Do something useful here such as auto-save user inputs
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop(); // Always call the superclass method first
+
+        // Perform larger CPU intensive shut-down operations, such as persisting to db
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy(); // always call the superclass
+
+        // stop method tracing that the activity started during onCreate()
+        // onandroid.os.Debug.stopMethodTracing();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        // Save the user's current game statue
+        savedInstanceState.putInt(STATE_SCORE, score+1);
+        savedInstanceState.putInt(STATE_LEVEL, level+1);
+
+        super.onSaveInstanceState(savedInstanceState); // always called the superclass
+    }
+
+    @Override
+    public void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+
+        // Restore state members from saved instance
+        // Not necessary if they are included in onCreate()
+        //score = savedInstanceState.getInt(STATE_SCORE);
+        //level = savedInstanceState.getInt(STATE_LEVEL);
     }
 
     @Override
