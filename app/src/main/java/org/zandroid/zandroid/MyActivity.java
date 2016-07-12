@@ -98,7 +98,10 @@ public class MyActivity extends AppCompatActivity {
 
         // Start an activity if it's safe
         if (isIntentSafe) {
-            startActivity(mapIntent);
+            // Create an intent to show chooser
+            String title = getResources().getString(R.string.map_chooser_title);
+            Intent mapChooser = Intent.createChooser(mapIntent, title);
+            startActivity(mapChooser);
         }
     }
 
