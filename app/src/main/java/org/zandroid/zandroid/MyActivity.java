@@ -5,6 +5,9 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -14,6 +17,10 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.util.List;
 
 public class MyActivity extends AppCompatActivity {
 
@@ -73,6 +80,26 @@ public class MyActivity extends AppCompatActivity {
         String message = editText.getText().toString();
         intent.putExtra(EXTRA_MESSAGE, message);
         startActivity(intent);
+    }
+
+    /** Called when the user clicks the Map button */
+    public void mapAddress(View view) throws UnsupportedEncodingException {
+        EditText editText = (EditText) findViewById(R.id.edit_address);
+        String address = editText.getText().toString();
+        String query = URLEncoder.encode(address,"utf-8");
+        //Uri location = Uri.parse("geo:0,0?q=1600+Amphiteatre+Parkway,+Mountain+View,+California");
+        Uri location = Uri.parse("geo:0,0?q=" + query);
+        Intent mapIntent = new Intent(Intent.ACTION_VIEW, location);
+
+        // verify it resolves
+        PackageManager packageManager = getPackageManager();
+        List<ResolveInfo> activities = packageManager.queryIntentActivities(mapIntent, 0);
+        boolean isIntentSafe = activities.size() > 0;
+
+        // Start an activity if it's safe
+        if (isIntentSafe) {
+            startActivity(mapIntent);
+        }
     }
 
     /**
