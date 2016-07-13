@@ -1,5 +1,6 @@
 package org.zandroid.zandroid;
 
+import android.Manifest;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
@@ -7,10 +8,14 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -25,6 +30,9 @@ import java.util.List;
 public class MyActivity extends AppCompatActivity {
 
     public final static String EXTRA_MESSAGE = "org.zandorid.zandroid.MESSAGE";
+    private static final int PICK_CONTACT_REQUEST = 1;
+    private static final int MY_PERMISSIONS_REQUEST_READ_CONTACTS = 2;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -102,6 +110,85 @@ public class MyActivity extends AppCompatActivity {
             String title = getResources().getString(R.string.map_chooser_title);
             Intent mapChooser = Intent.createChooser(mapIntent, title);
             startActivity(mapChooser);
+        }
+    }
+
+    /** Called when the user clicks the Pick button */
+    public void pickContact(View view) {
+        Intent pickContactIntent = new Intent(Intent.ACTION_PICK, Uri.parse("content://contacts"));
+        // Show user only contacts w/ phone number
+        pickContactIntent.setType(ContactsContract.CommonDataKinds.Phone.CONTENT_TYPE);
+        startActivityForResult(pickContactIntent, PICK_CONTACT_REQUEST);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent resultIntent) {
+        // Check which request we're responding to
+        if (requestCode == PICK_CONTACT_REQUEST) {
+            // Make sure the request was successful
+            if (resultCode == RESULT_OK) {
+                // Get the URI that points to the selected contact
+                Uri contactUri = resultIntent.getData();
+                // We only need to NUMBER column, because there will be only one row in the result
+                String[] projection = {ContactsContract.CommonDataKinds.Phone.NUMBER};
+
+                // Perform the query on the contact to get the NUMBER column
+                // We don't need a selection or sort order (there's only one result for the given URI)
+                // CAUTION: The query() method should be calle from a separate thread to avoid blocking
+                // your app's UI thread. This code does not do that.
+                // Consider using CursorLoader to perform the query
+                Cursor cursor = getContentResolver().query(contactUri, projection, null, null, null);
+                cursor.moveToFirst();
+
+                // Retrieve the phone number from the NUMBER column
+                int column = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER);
+                String number = cursor.getString(column);
+                EditText editText = (EditText) findViewById(R.id.edit_contact);
+                editText.setText("contact's phone number: " + number);
+            }
+        }
+    }
+
+    /** Called when the user clicks the Request button */
+    public void requestPermission(View view) {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS)
+                != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_CONTACTS)) {
+                Snackbar.make(view, R.string.permission_read_contacts_rational,
+                        Snackbar.LENGTH_INDEFINITE)
+                        .setAction(R.string.ok, new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                ActivityCompat.requestPermissions(MyActivity.this,
+                                        new String[]{Manifest.permission.READ_CONTACTS},
+                                        MY_PERMISSIONS_REQUEST_READ_CONTACTS);
+                            }
+                        })
+                        .show();
+            } else {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_CONTACTS},
+                        MY_PERMISSIONS_REQUEST_READ_CONTACTS);
+            }
+        } else {
+            EditText editText = (EditText) findViewById(R.id.edit_request);
+            editText.setText("Read contacts permission has already been granted");
+
+        }
+    }
+
+    /** Handle permission request response */
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_READ_CONTACTS: {
+                EditText editText = (EditText) findViewById(R.id.edit_request);
+                // if request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    editText.setText("Read contacts permission granted");
+                } else {
+                    editText.setText("Read contacts permission denied");
+                }
+                return;
+            }
         }
     }
 
