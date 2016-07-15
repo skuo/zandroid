@@ -16,12 +16,15 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.ActionProvider;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
+import android.widget.ShareActionProvider;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -57,12 +60,33 @@ public class MyActivity extends AppCompatActivity {
         editor.putBoolean("notification", true);
         editor.putString("school","usc");
         editor.apply();
+
+        // Handle incoming content
+        Intent intent = getIntent();
+        String action = intent.getAction();
+        String type = intent.getType();
+        EditText editText = (EditText) findViewById(R.id.edit_incoming_content);
+        if (Intent.ACTION_SEND.equals(action) && type != null) {
+            if ("text/plain".equals(type)) {
+                editText.setText("**> Handle text content");
+            } else if (type.startsWith("image/")) {
+                editText.setText("**> Handle single image");
+            }
+        } else if (Intent.ACTION_SEND_MULTIPLE.equals(action) && type != null) {
+            if (type.startsWith("image/")) {
+                editText.setText("**> Handle multiple images");
+            }
+        }
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_my, menu);
+
+        // locate MenuItem with ShareActionProvider
+        MenuItem shareItem = menu.findItem(R.id.menu_item_share);
+
         return true;
     }
 
@@ -76,6 +100,12 @@ public class MyActivity extends AppCompatActivity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
+        } else if (id == R.id.menu_item_share) {
+            Intent shareIntent = new Intent(Intent.ACTION_SEND);
+            shareIntent.setAction(Intent.ACTION_SEND);
+            shareIntent.setType("text/plain");
+            shareIntent.putExtra(Intent.EXTRA_TEXT, "text to share");
+            startActivity(Intent.createChooser(shareIntent,"Share via"));
         }
 
         return super.onOptionsItemSelected(item);
