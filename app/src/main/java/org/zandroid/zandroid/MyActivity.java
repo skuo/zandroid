@@ -81,6 +81,7 @@ public class MyActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    // -----------------------------------------------
     /** Called when the user clicks the Send button */
     public void sendMessage(View view) {
         Intent intent = new Intent(this, DisplayMessageActivity.class);
@@ -90,6 +91,7 @@ public class MyActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    // -----------------------------------------------
     /** Called when the user clicks the Map button */
     public void mapAddress(View view) throws UnsupportedEncodingException {
         EditText editText = (EditText) findViewById(R.id.edit_address);
@@ -113,6 +115,7 @@ public class MyActivity extends AppCompatActivity {
         }
     }
 
+    // -----------------------------------------------
     /** Called when the user clicks the Pick button */
     public void pickContact(View view) {
         Intent pickContactIntent = new Intent(Intent.ACTION_PICK, Uri.parse("content://contacts"));
@@ -149,11 +152,13 @@ public class MyActivity extends AppCompatActivity {
         }
     }
 
+    // -----------------------------------------------
     /** Called when the user clicks the Request button */
     public void requestPermission(View view) {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS)
                 != PackageManager.PERMISSION_GRANTED) {
             if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_CONTACTS)) {
+                // Show rational to user
                 Snackbar.make(view, R.string.permission_read_contacts_rational,
                         Snackbar.LENGTH_INDEFINITE)
                         .setAction(R.string.ok, new View.OnClickListener() {
@@ -166,6 +171,7 @@ public class MyActivity extends AppCompatActivity {
                         })
                         .show();
             } else {
+                // request permission directly
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_CONTACTS},
                         MY_PERMISSIONS_REQUEST_READ_CONTACTS);
             }
@@ -192,6 +198,7 @@ public class MyActivity extends AppCompatActivity {
         }
     }
 
+    // -----------------------------------------------
     /**
      * Switching between two fragments: article and book
      * @param view
