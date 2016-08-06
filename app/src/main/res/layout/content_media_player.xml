@@ -38,10 +38,11 @@
         android:layout_alignTop="@+id/mpButton1"
         android:layout_toRightOf="@+id/mpButton1"
         android:layout_toEndOf="@+id/mpButton1" />
+
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="&lt;"
+        android:text="&gt;"
         android:id="@+id/mpButton3"
         android:layout_alignTop="@+id/mpButton2"
         android:layout_toRightOf="@+id/mpButton2"

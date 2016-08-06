@@ -3,20 +3,36 @@ package org.zandroid.zandroid;
 import android.app.Fragment;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.TextViewCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.RelativeLayout;
+import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import java.util.concurrent.TimeUnit;
 
 public class MediaPlayerActivity extends AppCompatActivity {
+    public static int oneTimeOnly = 0;
+    private Button b1, b2, b3, b4;
+    private MediaPlayer mediaPlayer;
+    private double startTime = 0, finalTime = 0;
+    private Handler myHandler = new Handler();
+    private int forwardTime = 5000, backwardTime = 5000;
+    private SeekBar seekBar;
+    private TextView tx2, tx3, tx4;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +53,111 @@ public class MediaPlayerActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         Intent intent = getIntent();
+
+        // Media Player section
+        b1 = (Button) findViewById(R.id.mpButton1);
+        b2 = (Button) findViewById(R.id.mpButton2);
+        b3 = (Button) findViewById(R.id.mpButton3);
+        b4 = (Button) findViewById(R.id.mpButton4);
+        tx2 = (TextView) findViewById(R.id.mpTextView2);
+        tx3 = (TextView) findViewById(R.id.mpTextView3);
+        tx4 = (TextView) findViewById(R.id.mpTextView4);
+        tx4.setText("initial_life.mp4");
+
+        mediaPlayer = MediaPlayer.create(this, R.raw.initial_lift);
+        seekBar = (SeekBar) findViewById(R.id.seekBar);
+        seekBar.setClickable(false);
+        b2.setEnabled(false);
+
+        b3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getApplicationContext(), "Playing media",Toast.LENGTH_SHORT).show();
+                mediaPlayer.start();
+
+                finalTime = mediaPlayer.getDuration();
+                startTime = mediaPlayer.getCurrentPosition();
+
+                if (oneTimeOnly == 0) {
+                    seekBar.setMax((int) finalTime);
+                    oneTimeOnly = 1;
+                }
+                tx2.setText(String.format("%d min, %d sec",
+                        TimeUnit.MILLISECONDS.toMinutes((long) finalTime),
+                        TimeUnit.MILLISECONDS.toSeconds((long) finalTime) -
+                                TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes((long) finalTime)))
+                );
+
+                tx2.setText(String.format("%d min, %d sec",
+                        TimeUnit.MILLISECONDS.toMinutes((long) startTime),
+                        TimeUnit.MILLISECONDS.toSeconds((long) startTime) -
+                                TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes((long) startTime)))
+                );
+
+                seekBar.setProgress((int)startTime);
+                myHandler.postDelayed(UpdateMediaTime,100);
+                b2.setEnabled(true);
+                b3.setEnabled(false);
+            }
+        });
+
+        b2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getApplicationContext(), "Pausing sound",Toast.LENGTH_SHORT).show();
+                mediaPlayer.pause();
+                b2.setEnabled(false);
+                b3.setEnabled(true);
+            }
+        });
+
+        b1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int temp = (int)startTime;
+
+                if((temp+forwardTime)<=finalTime){
+                    startTime = startTime + forwardTime;
+                    mediaPlayer.seekTo((int) startTime);
+                    Toast.makeText(getApplicationContext(),"You have Jumped forward 5 seconds",Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    Toast.makeText(getApplicationContext(),"Cannot jump forward 5 seconds",Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        b4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int temp = (int)startTime;
+
+                if((temp-backwardTime)>0){
+                    startTime = startTime - backwardTime;
+                    mediaPlayer.seekTo((int) startTime);
+                    Toast.makeText(getApplicationContext(),"You have Jumped backward 5 seconds",Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    Toast.makeText(getApplicationContext(),"Cannot jump backward 5 seconds",Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
+
+    private Runnable UpdateMediaTime = new Runnable() {
+        public void run() {
+            startTime = mediaPlayer.getCurrentPosition();
+            tx2.setText(String.format("%d min, %d sec",
+
+                    TimeUnit.MILLISECONDS.toMinutes((long) startTime),
+                    TimeUnit.MILLISECONDS.toSeconds((long) startTime) -
+                            TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.
+                                    toMinutes((long) startTime)))
+            );
+            seekBar.setProgress((int)startTime);
+            myHandler.postDelayed(this, 100);
+        }
+    };
 
     @Override
     public void onResume() {
