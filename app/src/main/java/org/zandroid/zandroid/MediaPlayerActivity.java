@@ -4,6 +4,7 @@ import android.app.Fragment;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.MediaPlayer;
+import android.media.session.MediaController;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
@@ -21,6 +22,7 @@ import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.VideoView;
 
 import java.util.concurrent.TimeUnit;
 
@@ -33,6 +35,8 @@ public class MediaPlayerActivity extends AppCompatActivity {
     private int forwardTime = 5000, backwardTime = 5000;
     private SeekBar seekBar;
     private TextView tx2, tx3, tx4;
+
+    private MediaController mediaController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +57,13 @@ public class MediaPlayerActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         Intent intent = getIntent();
+
+        // Video
+        VideoView videoView = (VideoView) findViewById(R.id.videoView);
+        String path = "android.resource://" + getPackageName() + "/" + R.raw.initial_lift;
+        videoView.setVideoPath(path);
+        videoView.requestFocus();
+        videoView.start();
 
         // Media Player section
         b1 = (Button) findViewById(R.id.mpButton1);
