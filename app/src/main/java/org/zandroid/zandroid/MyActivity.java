@@ -4,11 +4,14 @@ import android.Manifest;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.database.Cursor;
+import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
@@ -16,15 +19,12 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.view.ActionProvider;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
-import android.widget.ShareActionProvider;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -77,6 +77,12 @@ public class MyActivity extends AppCompatActivity {
                 editText.setText("**> Handle multiple images");
             }
         }
+
+        // register audio manager
+        AudioManager am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+        am.registerMediaButtonEventReceiver(new ComponentName(getPackageName(), RemoteControlReceiver.class.getName()));
+        // unregister audio manager
+        // am.unregisterMediaButtonEventReceiver(RemoteControlReceiver);
     }
 
     @Override
@@ -226,6 +232,12 @@ public class MyActivity extends AppCompatActivity {
                 return;
             }
         }
+    }
+
+    /** Called when the user clicks the Media Player button */
+    public void mediaPlayer(View view) {
+        Intent intent = new Intent(this, MediaPlayerActivity.class);
+        startActivity(intent);
     }
 
     // -----------------------------------------------

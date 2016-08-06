@@ -16,18 +16,12 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-public class DisplayMessageActivity extends AppCompatActivity {
-
-    static final String STATE_SCORE = "playerScore";
-    static final String STATE_LEVEL = "playerLevel";
-
-    private int score = 1;
-    private int level = 1;
+public class MediaPlayerActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_display_message);
+        setContentView(R.layout.activity_media_player);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -36,30 +30,17 @@ public class DisplayMessageActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                Snackbar.make(view, "Replace with your own action for Media Player Activity", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
         });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        // check whether we're recreating a previously destroyed instance
-        if (savedInstanceState != null) {
-            score = savedInstanceState.getInt(STATE_SCORE);
-            level = savedInstanceState.getInt(STATE_LEVEL);
-        }
-
-        // get preferences
-        SharedPreferences prefs = getSharedPreferences("MyPref", MODE_PRIVATE);
-        String school = prefs.getString("school","unknown");
-
         Intent intent = getIntent();
-        String message = intent.getStringExtra(MyActivity.EXTRA_MESSAGE);
         TextView textView = new TextView(this);
         textView.setTextSize(40);
         String hello = getResources().getString(R.string.hello_world);
-        textView.setText("[" + level + "," + score + "] "
-                + hello + " ==> " + message
-            + " for " + school);
+        textView.setText(hello );
         RelativeLayout layout = (RelativeLayout) findViewById(R.id.content);
         layout.addView(textView);
     }
@@ -94,8 +75,6 @@ public class DisplayMessageActivity extends AppCompatActivity {
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
         // Save the user's current game statue
-        savedInstanceState.putInt(STATE_SCORE, score+1);
-        savedInstanceState.putInt(STATE_LEVEL, level+1);
 
         super.onSaveInstanceState(savedInstanceState); // always called the superclass
     }
@@ -122,18 +101,4 @@ public class DisplayMessageActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    /**
-     * A placeholder fragment containing a simple view.
-     */
-    public static class PlaceholderFragment extends Fragment {
-
-        public PlaceholderFragment() {}
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.activity_display_message, container, false);
-            return rootView;
-        }
-    }
 }

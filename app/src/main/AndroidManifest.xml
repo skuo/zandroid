@@ -46,6 +46,25 @@
                 android:value="org.zandroid.zandroid.MyActivity" />
         </activity>
 
+        <activity
+            android:name=".MediaPlayerActivity"
+            android:label="@string/title_activity_media_player"
+            android:parentActivityName="org.zandroid.zandroid.MyActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="org.zandroid.zandroid.MyActivity" />
+        </activity>
+
+        <reciever android:name=".RemoteControlReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.MEDIA_BUTTON" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.media.VOLUME_CHANGED_ACTION" />
+            </intent-filter>
+        </reciever>
+
     </application>
 
 </manifest>

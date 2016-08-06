@@ -90,7 +90,18 @@
             android:layout_height="wrap_content"
             android:hint="@string/edit_incoming_content"
             android:layout_weight="1" />
+    </LinearLayout>
 
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/button_media_player"
+            android:onClick="mediaPlayer"/>
     </LinearLayout>
 
     <Button
