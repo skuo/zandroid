@@ -1,24 +1,17 @@
 package org.zandroid.zandroid;
 
-import android.app.Fragment;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.media.MediaPlayer;
-import android.media.session.MediaController;
+import android.widget.MediaController;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v4.widget.TextViewCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -62,6 +55,9 @@ public class MediaPlayerActivity extends AppCompatActivity {
         VideoView videoView = (VideoView) findViewById(R.id.videoView);
         String path = "android.resource://" + getPackageName() + "/" + R.raw.initial_lift;
         videoView.setVideoPath(path);
+        mediaController = new MediaController(this);
+        mediaController.setAnchorView(videoView);
+        videoView.setMediaController(mediaController);
         videoView.requestFocus();
         videoView.start();
 
