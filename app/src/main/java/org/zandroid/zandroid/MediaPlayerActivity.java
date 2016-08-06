@@ -37,12 +37,6 @@ public class MediaPlayerActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         Intent intent = getIntent();
-        TextView textView = new TextView(this);
-        textView.setTextSize(40);
-        String hello = getResources().getString(R.string.hello_world);
-        textView.setText(hello );
-        RelativeLayout layout = (RelativeLayout) findViewById(R.id.content);
-        layout.addView(textView);
     }
 
     @Override

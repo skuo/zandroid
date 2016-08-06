@@ -13,4 +13,87 @@
     tools:context="org.zandroid.zandroid.MediaPlayerActivity"
     tools:showIn="@layout/activity_media_player">
 
+    <TextView android:text="Music Palyer" android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/mpTextView"
+        android:textColor="#ff7aff24"
+        android:textSize="35dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="&gt;&gt;"
+        android:id="@+id/mpButton1"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="||"
+        android:id="@+id/mpButton2"
+        android:layout_alignTop="@+id/mpButton1"
+        android:layout_toRightOf="@+id/mpButton1"
+        android:layout_toEndOf="@+id/mpButton1" />
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="&lt;"
+        android:id="@+id/mpButton3"
+        android:layout_alignTop="@+id/mpButton2"
+        android:layout_toRightOf="@+id/mpButton2"
+        android:layout_toEndOf="@+id/mpButton2" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="&lt;&lt;"
+        android:id="@+id/mpButton4"
+        android:layout_alignTop="@+id/mpButton3"
+        android:layout_toRightOf="@+id/mpButton3"
+        android:layout_toEndOf="@+id/mpButton3" />
+
+    <SeekBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/seekBar"
+        android:layout_alignLeft="@+id/mpTextView"
+        android:layout_alignStart="@+id/mpTextView"
+        android:layout_alignRight="@+id/mpTextView"
+        android:layout_alignEnd="@+id/mpTextView"
+        android:layout_above="@+id/mpButton1" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Small Text 2"
+        android:id="@+id/mpTextView2"
+        android:layout_above="@+id/seekBar"
+        android:layout_toLeftOf="@+id/mpTextView"
+        android:layout_toStartOf="@+id/mpTextView" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Small Text 3"
+        android:id="@+id/mpTextView3"
+        android:layout_above="@+id/seekBar"
+        android:layout_toRightOf="@+id/mpTextView"
+        android:layout_toEndOf="@+id/mpTextView" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Medium Text"
+        android:id="@+id/mpTextView4"
+        android:layout_alignBaseline="@+id/mpTextView2"
+        android:layout_alignBottom="@+id/mpTextView2"
+        android:layout_centerHorizontal="true" />
+
 </RelativeLayout>
