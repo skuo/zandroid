@@ -97,6 +97,24 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
 
+        <EditText android:id="@+id/edit_url"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="@string/edit_url"
+            android:layout_weight="1" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/button_connect"
+            android:onClick="connect"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

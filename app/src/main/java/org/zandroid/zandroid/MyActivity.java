@@ -218,6 +218,16 @@ public class MyActivity extends AppCompatActivity {
         }
     }
 
+    /** Called when the user clicks the Send button */
+    public void connect(View view) {
+        Intent intent = new Intent(this, NetworkActivity.class);
+        EditText editText = (EditText) findViewById(R.id.edit_url);
+        String message = editText.getText().toString();
+        intent.putExtra(EXTRA_MESSAGE, message);
+        startActivity(intent);
+    }
+
+
     /** Handle permission request response */
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
         switch (requestCode) {
